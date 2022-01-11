@@ -24,7 +24,10 @@
     "exposeErrorDetails": true
   },
   "upload": {
-    "location": "~/storagegateway/upload"
+    "location": "~/storagegateway/upload",
+    "multipart": {
+      "location": "~/storagegateway/upload-sessions"
+    }
   },
   "onedrive": {
     "rootFolder": "Applications/StorageGateway/storagegateway-acceptance",
