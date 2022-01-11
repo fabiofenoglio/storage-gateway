@@ -19,11 +19,15 @@
     "url": null
   },
   "security": {
+    "tokenIssuer": "acceptance-token-issuer",
     "tokenSecret": "acceptance-token-secret",
     "exposeErrorDetails": true
   },
   "upload": {
-    "location": "/home/my-user/storagegateway/upload"
+    "location": "~/storagegateway/upload",
+    "multipart": {
+      "location": "~/storagegateway/upload-sessions"
+    }
   },
   "onedrive": {
     "rootFolder": "Applications/StorageGateway/storagegateway-acceptance",
@@ -31,7 +35,7 @@
     "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET:test-client-secret}"
   },
   "filesystem": {
-    "rootFolder": "/home/my-user/storagegateway/filesystem-storage"
+    "rootFolder": "~/storagegateway/filesystem-storage"
   },
   "errorHandling": {
     "enableRollbar": false,
