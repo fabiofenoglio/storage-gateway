@@ -1,5 +1,6 @@
 # storage-gateway
 
+[![CircleCI](https://circleci.com/gh/fabiofenoglio/storage-gateway/tree/main.svg?style=shield)](https://circleci.com/gh/fabiofenoglio/storage-gateway/tree/main)
 ![CodeQL](https://github.com/fabiofenoglio/storage-gateway/workflows/CodeQL/badge.svg)
 
 This applications provides an API for object storage, leveraging multiple different storage services and providing features like metadata, thumbnails, encryption, upload sessions and more.
