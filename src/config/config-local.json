@@ -1,0 +1,41 @@
+{
+  "envName": "LOCAL",
+  "baseUrl": "http://localhost:3000",
+  "logging": {
+    "rootLevel": "debug",
+    "datasourceLevel": "debug",
+    "securityLevel": "debug",
+    "serviceLevel": "debug",
+    "onedriveLevel": "debug",
+    "s3Level": "debug"
+  },
+  "datasource": {
+    "url": "${env.STORAGEGATEWAY_DATABASE_URL:mysqluser:mysqluserpwd@localhost:3351/mysqldb}",
+    "debug": true,
+    "connectionTimeout": 20000,
+    "ssl": true
+  },
+  "security": {
+    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET:your-jwt-token-secret}",
+    "exposeErrorDetails": true
+  },
+  "upload": {
+    "location": "/home/my-user/storagegateway/upload",
+    "limits": {
+      "fileSize": 104857600
+    }
+  },
+  "onedrive": {
+    "rootFolder": "Applications/StorageGateway/storagegateway-local",
+    "applicationRedirectUrl": "http://localhost:3000/onedrive/cb",
+    "applicationClientId": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_ID:your-onedrive-client-id}",
+    "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET:your-onedrive-client-secret}"
+  },
+  "filesystem": {
+    "rootFolder": "/home/my-user/storagegateway/filesystem-storage"
+  },
+  "errorHandling": {
+    "enableRollbar": false,
+    "rollbarToken": null
+  }
+}

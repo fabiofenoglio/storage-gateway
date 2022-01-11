@@ -1,0 +1,14 @@
+{
+  "artifactUrl": "https://github.com/fabiofenoglio/storage-gateway",
+  "developerEmail": "development@fabiofenoglio.it",
+  "developerName": "Fabio Fenoglio",
+  "developerOrganization": "fabiofenoglio.it",
+  "developerOrganizationUrl": "https://fabiofenoglio.it",
+  "hideGenerationTimestamp": true,
+  "licenseName": "GPL",
+  "licenseUrl": "https://www.gnu.org/licenses/gpl-3.0.en.html",
+  "scmConnection": "scm:git:git@github.com:fabiofenoglio/storage-gateway.git",
+  "scmDeveloperConnection": "scm:git:git@github.com:fabiofenoglio/storage-gateway.git",
+  "scmUrl": "https://github.com/fabiofenoglio/storage-gateway",
+  "useAbstractionForFiles": true
+}

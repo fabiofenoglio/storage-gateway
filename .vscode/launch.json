@@ -1,0 +1,96 @@
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run single test",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "runtimeArgs": [
+        "-r",
+        "${workspaceRoot}/node_modules/source-map-support/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "autoAttachChildProcesses": true,
+      "args": [
+        "--config",
+        "${workspaceRoot}/.mocharc.json",
+        "${workspaceRoot}/dist/__tests__/acceptance/upload-session/upload-session.acceptance.js",
+        "-t",
+        "0",
+        "--timeout",
+        "25000",
+        "--integration-tests",
+        "--bail"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/dist/index.js",
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Mocha tests",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "runtimeArgs": [
+        "-r",
+        "${workspaceRoot}/node_modules/source-map-support/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "autoAttachChildProcesses": true,
+      "args": [
+        "--config",
+        "${workspaceRoot}/.mocharc.json",
+        "${workspaceRoot}/dist/__tests__/**/*.js",
+        "-t",
+        "0",
+        "--timeout 15000"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run javascript raw test",
+      "program": "scripts/test/test.js",
+      "runtimeArgs": [],
+      "cwd": "${workspaceRoot}",
+      "autoAttachChildProcesses": true,
+      "args": [
+        "scripts/test/test.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Mocha integ. tests",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "runtimeArgs": [
+        "-r",
+        "${workspaceRoot}/node_modules/source-map-support/register"
+      ],
+      "cwd": "${workspaceRoot}",
+      "autoAttachChildProcesses": true,
+      "args": [
+        "--config",
+        "${workspaceRoot}/.mocharc.json",
+        "${workspaceRoot}/dist/__tests__/**/*.js",
+        "-t",
+        "0",
+        "--timeout",
+        "25000",
+        "--integration-tests"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Process",
+      "port": 5858
+    }
+  ]
+}

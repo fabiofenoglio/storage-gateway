@@ -1,0 +1,3 @@
+fs/minio/data/storagegateway-test-acceptance-000/t*
+fs/minio/data/.*
+*.bat

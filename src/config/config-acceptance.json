@@ -1,0 +1,43 @@
+{
+  "envName": "ACCEPTANCE",
+  "baseUrl": "http://acceptance-url",
+  "logging": {
+    "rootLevel": "warn",
+    "datasourceLevel": "warn",
+    "securityLevel": "warn",
+    "serviceLevel": "warn",
+    "onedriveLevel": "warn",
+    "s3Level": "warn"
+  },
+  "rest": {
+    "host": "127.0.0.1"
+  },
+  "datasource": {
+    "name": "Db",
+    "connector": "memory",
+    "enableTransactions": false,
+    "url": null
+  },
+  "security": {
+    "tokenSecret": "acceptance-token-secret",
+    "exposeErrorDetails": true
+  },
+  "upload": {
+    "location": "/home/my-user/storagegateway/upload"
+  },
+  "onedrive": {
+    "rootFolder": "Applications/StorageGateway/storagegateway-acceptance",
+    "applicationClientId": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_ID:test-client-id}",
+    "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET:test-client-secret}"
+  },
+  "filesystem": {
+    "rootFolder": "/home/my-user/storagegateway/filesystem-storage"
+  },
+  "errorHandling": {
+    "enableRollbar": false,
+    "rollbarToken": null
+  },
+  "cron": {
+    "enable": false
+  }
+}

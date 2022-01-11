@@ -1,0 +1,99 @@
+{
+  "appCode": "STORAGEGATEWAY",
+  "name": "storage-gateway",
+  "baseUrl": "http://localhost:3000",
+  "logging": {
+    "rootLevel": "info",
+    "datasourceLevel": "info",
+    "securityLevel": "info",
+    "serviceLevel": "info",
+    "onedriveLevel": "info",
+    "s3Level": "info"
+  },
+  "shutdown": {
+    "signals": ["SIGTERM", "SIGINT"],
+    "gracePeriod": 5000
+  },
+  "rest": {
+    "port": 3000,
+    "host": "localhost",
+    "gracePeriodForClose": 5000,
+    "openApiSpec": {
+      "setServersFromRequest": true
+    },
+    "expressSettings": {
+      "x-powered-by": false
+    }
+  },
+  "envName": "common",
+  "datasource": {
+    "name": "Db",
+    "connector": "mysql",
+    "debug": false,
+    "connectionTimeout": 10000,
+    "ssl": true,
+    "url": "${env.STORAGEGATEWAY_DATABASE_URL}",
+    "enableTransactions": true
+  },
+  "allowSchemaMigration": false,
+  "errorHandling": {
+    "enableRollbar": true,
+    "rollbarToken": "${env.STORAGEGATEWAY_ROLLBAR_TOKEN}"
+  },
+  "security": {
+    "exposeErrorDetails": false,
+    "realm": "STORAGEGATEWAY",
+    "tokenIssuer": "${env.STORAGEGATEWAY_IAM_ISSUER}",
+    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET}",
+    "algorithm": "HS256"
+  },
+  "upload": {
+    "location": "/var/storagegateway/uploads",
+    "limits": {
+      "fieldNameSize": 1024,
+      "fieldSize": 1048576,
+      "fields": 100,
+      "fileSize": 10737418240,
+      "files": 1,
+      "parts": 20,
+      "headerPairs": 500
+    },
+    "multipart": {
+      "location": "/var/storagegateway/upload-sessions",
+      "limits": {
+        "parts": 1000,
+        "partSize": 1073741824,
+        "totalSize": 21474836480
+      }
+    }
+  },
+  "memory": {
+    "enable": true
+  },
+  "onedrive": {
+    "enable": true,
+    "rootFolder": "Applications/StorageGateway/storagegateway-dev",
+    "applicationClientId": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_ID}",
+    "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET}",
+    "applicationRedirectUrl": "http://localhost:3000/onedrive/cb",
+    "applicationRequiredScopes": [
+      "offline_access",
+      "files.readwrite.all",
+      "User.Read"
+    ]
+  },
+  "s3": {
+    "enable": true,
+    "s3ForcePathStyle": true,
+    "defaultTresholdForSingleBufferingRequest": 1048576,
+    "defaultTresholdForSinglePartUpload": 6291456,
+    "defaultMultipartUploadPartSize": 5242880
+  },
+  "filesystem": {
+    "enable": true,
+    "rootFolder": "/var/storagegateway/filesystem-storage"
+  },
+  "cron": {
+    "enable": true
+  }
+}

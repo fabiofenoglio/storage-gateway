@@ -1,0 +1,63 @@
+{
+  "backbones": {
+    "fs": {
+      "relativePath": "/unit-test/bb1"
+    },
+    "onedrive": {
+      "driveId": "<your drive id>",
+      "ownerPrincipalId": "<your user id>"
+    },
+    "ibm": {
+      "endpoint": "s3.<region>.cloud-object-storage.appdomain.cloud",
+      "region": "<region>",
+      "credentials": {
+        "accessKeyId": "<your key id>",
+        "secretAccessKey": "<your key secret>"
+      }
+    },
+    "gcp": {
+      "region": "<region>",
+      "credentials": {
+        "accessKeyId": "<your key id>",
+        "secretAccessKey": "<your key secret>"
+      }
+    },
+    "oracle": {
+      "endpoint": "<your account id>.compat.objectstorage.<region>.oraclecloud.com",
+      "region": "<region>",
+      "credentials": {
+        "accessKeyId": "<your key id>",
+        "secretAccessKey": "<your key secret>"
+      }
+    },
+    "backblaze": {
+      "endpoint": "s3.<region>.backblazeb2.com",
+      "region": "<region>",
+      "credentials": {
+        "accessKeyId": "<your key id>",
+        "secretAccessKey": "<your key secret>"
+      }
+    },
+    "minio": {
+      "endpoint": "localhost:9000",
+      "credentials": {
+        "accessKeyId": "<your key id>",
+        "secretAccessKey": "<your key secret>"
+      }
+    }
+  },
+  "msgraph": {
+    "token": {
+      "accessToken": "<your access token here>",
+      "refreshToken": "<your refresh token here>",
+      "userPrincipalName": "<your email here>",
+      "expiresAt": "2021-02-21 17:54:33.0",
+      "issuedAt": "2021-01-17 18:14:28.0",
+      "requestedAt": "2021-01-17 18:14:28.0",
+      "refreshedAt": "2021-02-21 16:54:34.0",
+      "refreshRequestedAt": "2021-02-21 16:54:33.0",
+      "expiresIn": 3600,
+      "extExpiresIn": 3600
+    }
+  }
+}
