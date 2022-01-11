@@ -19,6 +19,7 @@
     "url": null
   },
   "security": {
+    "tokenIssuer": "acceptance-token-issuer",
     "tokenSecret": "acceptance-token-secret",
     "exposeErrorDetails": true
   },
