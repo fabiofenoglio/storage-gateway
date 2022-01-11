@@ -24,7 +24,7 @@
     "exposeErrorDetails": true
   },
   "upload": {
-    "location": "/home/my-user/storagegateway/upload"
+    "location": "~/storagegateway/upload"
   },
   "onedrive": {
     "rootFolder": "Applications/StorageGateway/storagegateway-acceptance",
@@ -32,7 +32,7 @@
     "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET:test-client-secret}"
   },
   "filesystem": {
-    "rootFolder": "/home/my-user/storagegateway/filesystem-storage"
+    "rootFolder": "~/storagegateway/filesystem-storage"
   },
   "errorHandling": {
     "enableRollbar": false,
