@@ -44,7 +44,6 @@ export abstract class StringUtils {
             if (hasDefaultValue) {
               computed = defaultValue;
             } else {
-              console.log('error context:', matchGroups);
               throw new Error('Missing required environment variable ' + key);
             }
           }

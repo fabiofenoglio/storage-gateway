@@ -205,7 +205,7 @@ export abstract class ConfigurationUtils {
     name: string,
     options?: {optional: boolean},
   ): any {
-    const fullpath = './src/config/' + name;
+    const fullpath = './config/' + name;
     if (!fs.existsSync(fullpath)) {
       if (options?.optional) {
         return null;

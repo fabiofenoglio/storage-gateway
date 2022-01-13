@@ -14,7 +14,7 @@
       "args": [
         "--config",
         "${workspaceRoot}/.mocharc.json",
-        "${workspaceRoot}/dist/__tests__/acceptance/upload-session/upload-session.acceptance.js",
+        "${workspaceRoot}/dist/__tests__/acceptance/content/create-content.acceptance.js",
         "-t",
         "0",
         "--timeout",

@@ -1,0 +1,32 @@
+{
+  "envName": "PRODUCTION",
+  "baseUrl": "${env.STORAGEGATEWAY_BASE_URL:https://storagegateway.yourhost.com}",
+  "logging": {
+    "rootLevel": "info",
+    "datasourceLevel": "info",
+    "securityLevel": "info",
+    "serviceLevel": "info",
+    "onedriveLevel": "debug"
+  },
+  "datasource": {
+    "url": "${env.STORAGEGATEWAY_DATABASE_URL}",
+    "connectionTimeout": 10000,
+    "ssl": true
+  },
+  "security": {
+    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET}"
+  },
+  "errorHandling": {
+    "enableRollbar": true
+  },
+  "onedrive": {
+    "rootFolder": "${env.STORAGEGATEWAY_ONEDRIVE_ROOT:Applications/StorageGateway/storagegateway}",
+    "applicationClientId": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_ID}",
+    "applicationClientSecret": "${env.STORAGEGATEWAY_ONEDRIVE_CLIENT_SECRET}",
+    "applicationRedirectUrl": "https://storagegateway.yourhost.com/onedrive/cb"
+  },
+  "rest": {
+    "port": "${env.STORAGEGATEWAY_PORT:3000}",
+    "host": "${env.STORAGEGATEWAY_HOST:localhost}"
+  }
+}
