@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-invalid-this */
-import {Client, expect} from '@loopback/testlab';
+import {
+  Client,
+  expect,
+} from '@loopback/testlab';
+
 import {StorageGatewayApplication} from '../../../application';
 import {
   ClientTenant,
@@ -8,9 +12,14 @@ import {
   StorageNode,
   StorageNodeType,
 } from '../../../models';
-import {supportedHashesList} from '../../../models/content/content-upload-dto.model';
+import {
+  supportedHashesList,
+} from '../../../models/content/content-upload-dto.model';
 import {CreateContentResponse} from '../../../rest';
-import {Constants, ObjectUtils} from '../../../utils';
+import {
+  Constants,
+  ObjectUtils,
+} from '../../../utils';
 import {
   getResource,
   getResourceWithMetadata,
@@ -18,7 +27,10 @@ import {
   givenMixedTenantConfigurations,
   givenSomeNodes,
 } from '../../helper/data-helper';
-import {givenPrincipal, TestPrincipal} from '../../helper/security-helper';
+import {
+  givenPrincipal,
+  TestPrincipal,
+} from '../../helper/security-helper';
 import {
   getMetricService,
   setupApplication,
@@ -548,6 +560,7 @@ describe('Create content', function () {
           );
 
           expect(payload.content.compare(createdContent.body)).to.equal(0);
+          expect(createdContent.body.compare(payload.content)).to.equal(0);
           expect(createdContent.body.compare(createdContent.body)).to.equal(0);
         } else {
           // https://stackoverflow.com/questions/26906007/onedrive-wrong-size-for-png-files

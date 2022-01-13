@@ -1,9 +1,14 @@
-import {service} from '@loopback/core';
-import {WinstonLogger} from '@loopback/logging';
-import {Condition, juggler} from '@loopback/repository';
-import {HttpErrors} from '@loopback/rest';
 import {CipherGCM} from 'crypto';
 import {v4 as uuidv4} from 'uuid';
+
+import {service} from '@loopback/core';
+import {WinstonLogger} from '@loopback/logging';
+import {
+  Condition,
+  juggler,
+} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
+
 import {
   AbstractBackbone,
   ClientTenant,
@@ -17,6 +22,7 @@ import {
   Page,
   Pageable,
   StorageNode,
+  supportedEncryptionPolicies,
   UploadedContent,
 } from '../../models';
 import {
@@ -25,11 +31,19 @@ import {
 } from '../../models/content/abstract-content.model';
 import {PaginationRepository} from '../../repositories';
 import {RestContext} from '../../rest';
-import {Constants, ObjectUtils, SanitizationUtils} from '../../utils';
+import {
+  Constants,
+  ObjectUtils,
+  SanitizationUtils,
+} from '../../utils';
 import {DaoService} from '../dao.service';
 import {TransactionService} from '../transaction-manager.service';
-import {AbstractBackboneManagerService} from './abstract-backbone-manager.service';
-import {AbstractContentManagerService} from './abstract-content-manager.service';
+import {
+  AbstractBackboneManagerService,
+} from './abstract-backbone-manager.service';
+import {
+  AbstractContentManagerService,
+} from './abstract-content-manager.service';
 import {ContentProcessorService} from './content-processor.service';
 
 export abstract class UnmanagedContentManagerService<
@@ -440,7 +454,7 @@ export abstract class UnmanagedContentManagerService<
 
         return this.wrapContentWithDecryption(
           remoteContentStreamer,
-          ObjectUtils.require(entity, 'contentSize'),
+          entity.contentSize ?? null,
           entity.encryption ?? null,
         );
       },
@@ -501,7 +515,7 @@ export abstract class UnmanagedContentManagerService<
 
         return this.wrapContentWithDecryption(
           remoteContentStreamer,
-          ObjectUtils.require(asset, 'contentSize'),
+          asset.contentSize ?? null,
           asset.encryption ?? null,
         );
       },
@@ -519,10 +533,13 @@ export abstract class UnmanagedContentManagerService<
     entity: AbstractContent | ContentWithMetadata,
     wrapper: EncryptedContentLocatorWrapper,
   ) {
-    if (wrapper.encryption?.auth) {
-      wrapper.encryption.auth = (wrapper.cipher as CipherGCM)!
-        .getAuthTag()
-        .toString('hex');
+    if (wrapper.encryption?.alg) {
+      const algSpecs = supportedEncryptionPolicies[wrapper.encryption.alg];
+      if (algSpecs.authenticated) {
+        wrapper.encryption.auth = (wrapper.cipher as CipherGCM)!
+          .getAuthTag()
+          .toString('hex');
+      }
     }
     entity.encryption = new ContentEncryptionMetadata({
       ...wrapper.encryption,

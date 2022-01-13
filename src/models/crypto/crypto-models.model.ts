@@ -1,4 +1,5 @@
 import {Cipher} from 'crypto';
+
 import {ContentStreamer} from '../content/content-streamer.model';
 
 export type SupportedEncryptionAlgorithm = 'aes-256-gcm' | 'aes-256-ctr';

@@ -1,11 +1,20 @@
+import {CipherGCM} from 'crypto';
+import {PassThrough} from 'stream';
+
 import {service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {HttpErrors} from '@loopback/rest';
-import {CipherGCM} from 'crypto';
-import {PassThrough} from 'stream';
-import {ClientTenant, Page, Pageable, StorageNode} from '../../models';
+
+import {
+  ClientTenant,
+  Page,
+  Pageable,
+  StorageNode,
+} from '../../models';
 import {AbstractContent} from '../../models/content/abstract-content.model';
-import {ContentEncryptionMetadata} from '../../models/content/content-encryption-metadata.model';
+import {
+  ContentEncryptionMetadata,
+} from '../../models/content/content-encryption-metadata.model';
 import {
   ContentWithMetadata,
   DeferredContentRetriever,
@@ -20,7 +29,10 @@ import {
   supportedEncryptionPolicies,
 } from '../../models/crypto/crypto-models.model';
 import {RestContext} from '../../rest/rest-context.model';
-import {ObjectUtils, SanitizationUtils} from '../../utils';
+import {
+  ObjectUtils,
+  SanitizationUtils,
+} from '../../utils';
 import {StreamUtils} from '../../utils/stream-utils';
 import {CryptoService} from '../crypto.service';
 import {MetricService} from '../metric.service';
@@ -162,10 +174,13 @@ export abstract class AbstractContentManagerService<T extends AbstractContent> {
     entity: AbstractContent | ContentWithMetadata,
     wrapper: EncryptedContentLocatorWrapper,
   ) {
-    if (wrapper.encryption?.auth) {
-      wrapper.encryption.auth = (wrapper.cipher as CipherGCM)!
-        .getAuthTag()
-        .toString('hex');
+    if (wrapper.encryption?.alg) {
+      const algSpecs = supportedEncryptionPolicies[wrapper.encryption.alg];
+      if (algSpecs.authenticated) {
+        wrapper.encryption.auth = (wrapper.cipher as CipherGCM)!
+          .getAuthTag()
+          .toString('hex');
+      }
     }
     entity.encryption = new ContentEncryptionMetadata({
       ...wrapper.encryption,
@@ -206,11 +221,9 @@ export abstract class AbstractContentManagerService<T extends AbstractContent> {
 
   protected async wrapContentWithDecryption(
     source: ContentStreamer,
-    totalSize: number,
+    totalSize: number | null | undefined,
     encryption: IDecryptionSpecifications | null | undefined,
   ): Promise<ContentStreamer> {
-    ObjectUtils.notNull(source, totalSize);
-
     if (!source.hasContent) {
       throw new Error('Source content is missing');
     }
@@ -219,9 +232,15 @@ export abstract class AbstractContentManagerService<T extends AbstractContent> {
       return source;
     }
 
+    ObjectUtils.notNull(source, totalSize);
+
     const encPolicy = supportedEncryptionPolicies[encryption?.alg];
     if (!encPolicy) {
       throw new Error('Unsupported encryption policy ' + encryption?.alg);
+    }
+
+    if (encPolicy.authenticated && !encryption?.auth) {
+      throw new Error('Encryption policy ' + encryption?.alg + ' requires authentication signature but none provided');
     }
 
     return ContentStreamer.fromStreamProvider(async r => {
@@ -236,7 +255,7 @@ export abstract class AbstractContentManagerService<T extends AbstractContent> {
       const toFetch = isRanged
         ? CryptoService.getBlocksCoveringRange(
             r!,
-            totalSize,
+            totalSize!,
             encPolicy.blockSize,
           )
         : null;
