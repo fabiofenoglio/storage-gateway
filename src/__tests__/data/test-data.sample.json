@@ -39,10 +39,10 @@
       }
     },
     "minio": {
-      "endpoint": "localhost:9000",
+      "endpoint": "http://localhost:9000",
       "credentials": {
-        "accessKeyId": "<your key id>",
-        "secretAccessKey": "<your key secret>"
+        "accessKeyId": "minio",
+        "secretAccessKey": "minio123456"
       }
     }
   },
