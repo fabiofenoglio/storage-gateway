@@ -67,6 +67,7 @@ typings/
 # Local-only tests
 /src/__tests__/local
 test-data.json
+local.*.bat
 
 # Generated clients
 /client

@@ -3,10 +3,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {
-  Condition,
-  juggler,
-} from '@loopback/repository';
+import {Condition, juggler} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 
 import {
@@ -31,19 +28,11 @@ import {
 } from '../../models/content/abstract-content.model';
 import {PaginationRepository} from '../../repositories';
 import {RestContext} from '../../rest';
-import {
-  Constants,
-  ObjectUtils,
-  SanitizationUtils,
-} from '../../utils';
+import {Constants, ObjectUtils, SanitizationUtils} from '../../utils';
 import {DaoService} from '../dao.service';
 import {TransactionService} from '../transaction-manager.service';
-import {
-  AbstractBackboneManagerService,
-} from './abstract-backbone-manager.service';
-import {
-  AbstractContentManagerService,
-} from './abstract-content-manager.service';
+import {AbstractBackboneManagerService} from './abstract-backbone-manager.service';
+import {AbstractContentManagerService} from './abstract-content-manager.service';
 import {ContentProcessorService} from './content-processor.service';
 
 export abstract class UnmanagedContentManagerService<

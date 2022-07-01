@@ -1,22 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {inject} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {
-  HttpErrors,
-  Request
-} from '@loopback/rest';
+import {HttpErrors, Request} from '@loopback/rest';
 import * as jwt from 'jsonwebtoken';
-import {
-  ConfigurationBindings,
-  LoggerBindings
-} from '../key';
-import {
-  TokenClientAuthenticationStrategyCredentials
-} from '../security/security-constants';
+import {ConfigurationBindings, LoggerBindings} from '../key';
+import {TokenClientAuthenticationStrategyCredentials} from '../security/security-constants';
 import {AppCustomSecurityConfig} from '../utils/configuration-utils';
 import {ObjectUtils} from '../utils/object-utils';
-
-
 
 export interface AuthenticationTokenPayload {
   id: number;

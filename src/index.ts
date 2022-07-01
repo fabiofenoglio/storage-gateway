@@ -1,10 +1,7 @@
 import minimist from 'minimist';
 
 import {StorageGatewayApplication} from './application';
-import {
-  AppCustomConfig,
-  ConfigurationUtils,
-} from './utils/configuration-utils';
+import {AppCustomConfig, ConfigurationUtils} from './utils/configuration-utils';
 
 export * from './application';
 
@@ -24,7 +21,9 @@ if (require.main === module) {
   // Run the application
   const args = minimist(process.argv.slice(2));
 
-  const config = ConfigurationUtils.buildConfiguration(args['profile'] ?? undefined);
+  const config = ConfigurationUtils.buildConfiguration(
+    args['profile'] ?? undefined,
+  );
 
   if (args['config']) {
     console.log(JSON.stringify(config, null, 2));
