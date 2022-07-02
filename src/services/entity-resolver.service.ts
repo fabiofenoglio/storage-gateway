@@ -1,8 +1,4 @@
-import {
-  inject,
-  injectable,
-  service,
-} from '@loopback/core';
+import {inject, injectable, service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {HttpErrors} from '@loopback/rest';
 
@@ -15,14 +11,9 @@ import {
   StorageNodeShare,
   UploadSession,
 } from '../models';
-import {
-  ContentAssetMetadata,
-} from '../models/content/content-asset-metadata.model';
+import {ContentAssetMetadata} from '../models/content/content-asset-metadata.model';
 import {Security} from '../security';
-import {
-  Constants,
-  ObjectUtils,
-} from '../utils';
+import {Constants, ObjectUtils} from '../utils';
 import {SanitizationUtils} from '../utils/sanitization-utils';
 import {AclService} from './acl.service';
 import {ClientTenantService} from './client-tenant.service';
@@ -543,5 +534,4 @@ export class EntityResolverService {
       session,
     };
   }
-
 }

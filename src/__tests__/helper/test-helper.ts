@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Class} from '@loopback/repository';
-import {
-  Client,
-  createRestAppClient,
-} from '@loopback/testlab';
+import {Client, createRestAppClient} from '@loopback/testlab';
 
 import {StorageGatewayApplication} from '../../';
 import {CronJobWrapper} from '../../cronjobs/wrapper.cronjob';
@@ -13,9 +10,7 @@ import {
   ClientTenantBackbone,
   S3BackboneDialect,
 } from '../../models';
-import {
-  DEFAULT_ENCRYPTION_ALGORITHM,
-} from '../../models/crypto/crypto-models.model';
+import {DEFAULT_ENCRYPTION_ALGORITHM} from '../../models/crypto/crypto-models.model';
 import {
   FilesystemContentRepository,
   OnedriveContentRepository,

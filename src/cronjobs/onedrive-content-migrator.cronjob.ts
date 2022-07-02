@@ -1,9 +1,6 @@
 import {service} from '@loopback/core';
 import {cronJob} from '@loopback/cron';
-import {
-  juggler,
-  repository,
-} from '@loopback/repository';
+import {juggler, repository} from '@loopback/repository';
 
 import {
   ContentStatus,
@@ -20,20 +17,21 @@ import {
   OnedriveContentManager,
   TransactionService,
 } from '../services';
-import {
-  CronWrapperBridgeService,
-} from '../services/cron/cron-wrapper-bridge.service';
+import {CronWrapperBridgeService} from '../services/cron/cron-wrapper-bridge.service';
 import {ObjectUtils} from '../utils';
 import {CronJobWrapper} from './wrapper.cronjob';
 
-type OnedriveContentMigrator = (ctx: CronJobExecutionContext, content: OnedriveContent, tx?: juggler.Transaction) => Promise<void>;
+type OnedriveContentMigrator = (
+  ctx: CronJobExecutionContext,
+  content: OnedriveContent,
+  tx?: juggler.Transaction,
+) => Promise<void>;
 
 @cronJob()
 export class OnedriveContentMigratorCronJob extends CronJobWrapper {
-
   migrators: {[spec: string]: OnedriveContentMigrator} = {
-   '3->4': this.migrate3to4,
-  }
+    '3->4': this.migrate3to4,
+  };
 
   constructor(
     @service(CronWrapperBridgeService)
@@ -59,7 +57,6 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
   }
 
   public async execute(ctx: CronJobExecutionContext): Promise<void> {
-
     const toMigrate = await this.contentRepository.findPage(
       {
         where: {
@@ -93,12 +90,21 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
     for (const record of toMigrate.content) {
       const migrator = this.findMigrator(record.engineVersion);
       if (!migrator) {
-        this.reportWarning(ctx, 'no migrator found to update from version ' + record.engineVersion);
+        this.reportWarning(
+          ctx,
+          'no migrator found to update from version ' + record.engineVersion,
+        );
         continue;
       }
 
       await this.transactionService.inTransaction(async tx => {
-        await this.applyMigration(ctx, record, migrator.toVersion, migrator.migrator, tx);
+        await this.applyMigration(
+          ctx,
+          record,
+          migrator.toVersion,
+          migrator.migrator,
+          tx,
+        );
       });
       migratedCounter++;
     }
@@ -115,7 +121,13 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
     migrator: OnedriveContentMigrator,
     transaction: juggler.Transaction,
   ): Promise<boolean> {
-    const context = 'migrating content ' + content.uuid + ' from version ' + content.engineVersion + ' to ' + toVersion;
+    const context =
+      'migrating content ' +
+      content.uuid +
+      ' from version ' +
+      content.engineVersion +
+      ' to ' +
+      toVersion;
     let success = false;
     let failure: Error | null = null;
 
@@ -128,9 +140,13 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
 
     if (success) {
       content.engineVersion = toVersion;
-      await this.contentRepository.updateById(content.id, {
-        engineVersion: content.engineVersion
-      }, {transaction})
+      await this.contentRepository.updateById(
+        content.id,
+        {
+          engineVersion: content.engineVersion,
+        },
+        {transaction},
+      );
 
       this.reportInfo(ctx, 'success ' + context);
     } else {
@@ -140,7 +156,9 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
     return success;
   }
 
-  private findMigrator(fromVersion: number): {migrator: OnedriveContentMigrator, toVersion: number} | null {
+  private findMigrator(
+    fromVersion: number,
+  ): {migrator: OnedriveContentMigrator; toVersion: number} | null {
     let attemptTarget = this.contentManager.engineVersion;
     while (attemptTarget > fromVersion) {
       const attemptSpec = '' + fromVersion + '->' + attemptTarget;
@@ -148,18 +166,33 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
       if (m) {
         return {migrator: m, toVersion: attemptTarget};
       }
-      attemptTarget --;
+      attemptTarget--;
     }
     return null;
   }
 
-  private async migrate3to4(ctx: CronJobExecutionContext, content: OnedriveContent, transaction?: juggler.Transaction): Promise<void> {
-
-    const node = await this.storageNodeRepository.findById(ObjectUtils.requireNotNull(content.nodeId), {}, {transaction});
-    const tenant = await this.clientTenantRepository.findById(ObjectUtils.requireNotNull(node.tenantId), {}, {transaction});
+  private async migrate3to4(
+    ctx: CronJobExecutionContext,
+    content: OnedriveContent,
+    transaction?: juggler.Transaction,
+  ): Promise<void> {
+    const node = await this.storageNodeRepository.findById(
+      ObjectUtils.requireNotNull(content.nodeId),
+      {},
+      {transaction},
+    );
+    const tenant = await this.clientTenantRepository.findById(
+      ObjectUtils.requireNotNull(node.tenantId),
+      {},
+      {transaction},
+    );
 
     // only the path has been updated
-    const newPathSpec = await this.contentManager.computeStoragePath(tenant, node, content);
+    const newPathSpec = await this.contentManager.computeStoragePath(
+      tenant,
+      node,
+      content,
+    );
 
     if (newPathSpec.path === content.onedrivePath) {
       // path is already correct
@@ -169,5 +202,4 @@ export class OnedriveContentMigratorCronJob extends CronJobWrapper {
     // fake migration
     return;
   }
-
 }

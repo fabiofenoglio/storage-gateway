@@ -4,18 +4,10 @@ import jwks from 'jwks-rsa';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {inject} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {
-  HttpErrors,
-  Request,
-} from '@loopback/rest';
+import {HttpErrors, Request} from '@loopback/rest';
 
-import {
-  ConfigurationBindings,
-  LoggerBindings,
-} from '../key';
-import {
-  TokenClientAuthenticationStrategyCredentials,
-} from '../security/security-constants';
+import {ConfigurationBindings, LoggerBindings} from '../key';
+import {TokenClientAuthenticationStrategyCredentials} from '../security/security-constants';
 import {AppCustomSecurityConfig} from '../utils/configuration-utils';
 
 export interface SignedAuthenticationTokenPayload {
@@ -36,8 +28,12 @@ export class TokenAuthenticationClientService {
     @inject(ConfigurationBindings.SECURITY_CONFIG)
     private securityConfig: AppCustomSecurityConfig,
   ) {
-    if (!!securityConfig.tokenJwksUri === !!securityConfig.tokenSecret?.length) {
-      throw new Error('exactly one of tokenJwksUri and tokenSecret must be provided')
+    if (
+      !!securityConfig.tokenJwksUri === !!securityConfig.tokenSecret?.length
+    ) {
+      throw new Error(
+        'exactly one of tokenJwksUri and tokenSecret must be provided',
+      );
     }
 
     if (securityConfig.tokenJwksUri) {
@@ -92,7 +88,7 @@ export class TokenAuthenticationClientService {
     if (this.jwksClient) {
       let decoded: jwt.Jwt;
       try {
-        const decodedAttempt = jwt.decode(token, { complete: true });
+        const decodedAttempt = jwt.decode(token, {complete: true});
         if (!decodedAttempt) {
           throw new Error('no token could be decoded');
         }
@@ -119,12 +115,10 @@ export class TokenAuthenticationClientService {
         throw new HttpErrors.Unauthorized(`Token decoding failed`);
       }
       return signingKey;
-
     } else if (this.securityConfig.tokenSecret?.length) {
       return this.securityConfig.tokenSecret;
-
     } else {
-      throw new Error('no key could be resolved for signature verification')
+      throw new Error('no key could be resolved for signature verification');
     }
   }
 

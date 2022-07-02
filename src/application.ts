@@ -8,10 +8,7 @@ import {
 import {BootMixin} from '@loopback/boot';
 import {createBindingFromClass} from '@loopback/context';
 import {CronComponent} from '@loopback/cron';
-import {
-  HealthComponent,
-  HealthTags,
-} from '@loopback/health';
+import {HealthComponent, HealthTags} from '@loopback/health';
 import {
   format,
   LoggingBindings,
@@ -19,33 +16,20 @@ import {
   WinstonTransports,
 } from '@loopback/logging';
 import {RepositoryMixin} from '@loopback/repository';
-import {
-  RestApplication,
-  RestBindings,
-} from '@loopback/rest';
+import {RestApplication, RestBindings} from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
 } from '@loopback/rest-explorer';
 import {ServiceMixin} from '@loopback/service-proxy';
 
-import {
-  FilesystemContentDeletionCronJob,
-} from './cronjobs/fs-content-deletion.cronjob';
+import {FilesystemContentDeletionCronJob} from './cronjobs/fs-content-deletion.cronjob';
 import {LogsCleanupCronJob} from './cronjobs/logs-cleanup.cronjob';
-import {
-  OnedriveContentDeletionCronJob,
-} from './cronjobs/onedrive-content-deletion.cronjob';
-import {
-  OnedriveContentMigratorCronJob,
-} from './cronjobs/onedrive-content-migrator.cronjob';
+import {OnedriveContentDeletionCronJob} from './cronjobs/onedrive-content-deletion.cronjob';
+import {OnedriveContentMigratorCronJob} from './cronjobs/onedrive-content-migrator.cronjob';
 import {S3ContentDeletionCronJob} from './cronjobs/s3-content-deletion.cronjob';
-import {
-  UploadFolderCleanupCronJob,
-} from './cronjobs/upload-folder-cleanup.cronjob';
-import {
-  UploadSessionsCleanupCronJob,
-} from './cronjobs/upload-sessions-cleanup.cronjob';
+import {UploadFolderCleanupCronJob} from './cronjobs/upload-folder-cleanup.cronjob';
+import {UploadSessionsCleanupCronJob} from './cronjobs/upload-sessions-cleanup.cronjob';
 import {DBHealthCheckProvider} from './health/db.healthcheck';
 import {
   ConfigurationBindings,
@@ -55,10 +39,7 @@ import {
 } from './key';
 import {TokenClientAuthenticationStrategy} from './security';
 import {MySequence} from './sequence';
-import {
-  ErrorService,
-  TokenAuthenticationClientService,
-} from './services';
+import {ErrorService, TokenAuthenticationClientService} from './services';
 import {AppCustomConfig} from './utils/configuration-utils';
 import {MultipartFormDataBodyParser} from './utils/multipart-parser';
 

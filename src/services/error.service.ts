@@ -3,20 +3,11 @@ import * as Rollbar from 'rollbar';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {inject} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {
-  Request,
-  RestBindings,
-} from '@loopback/rest';
+import {Request, RestBindings} from '@loopback/rest';
 import {SecurityBindings} from '@loopback/security';
 
-import {
-  ConfigurationBindings,
-  LoggerBindings,
-} from '../key';
-import {
-  AppCustomConfig,
-  ConfigurationUtils,
-} from '../utils';
+import {ConfigurationBindings, LoggerBindings} from '../key';
+import {AppCustomConfig, ConfigurationUtils} from '../utils';
 import {ClientProfile} from './client-profile.service';
 
 export class ErrorService {
