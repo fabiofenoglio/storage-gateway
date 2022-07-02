@@ -1,5 +1,7 @@
-import {securityId} from '@loopback/security';
 import * as jwt from 'jsonwebtoken';
+
+import {securityId} from '@loopback/security';
+
 import {Security} from '../../security/security-constants';
 import {ClientProfile} from '../../services';
 import {testConfig} from './test-helper';
@@ -14,27 +16,31 @@ export interface TestPrincipal {
 
 export function givenPrincipal(id = 1, platformAdmin = false): TestPrincipal {
   const profile: ClientProfile = {
-    [securityId]: id + '',
+    [securityId]: 'client' + id,
     authenticationMethod: Security.AuthenticationMethod.TOKEN,
     code: 'client' + id,
-    name: 'Test Client ' + id,
-    id,
-    groups: [],
     scopes: [
       Security.SCOPES.DOC_USAGE,
       ...(platformAdmin ? [Security.SCOPES.PLATFORM_ADMIN] : []),
     ],
   };
 
-  const token = jwt.sign(profile, testConfig.security.tokenSecret, {
+  const tokenPayload = {
+    scope: profile.scopes.join(' '),
+  };
+
+  const token = jwt.sign(tokenPayload, testConfig.security.tokenSecret!, {
+    subject: profile.code,
     issuer: testConfig.security.tokenIssuer,
+    audience: testConfig.security.tokenAudience,
   });
 
   const wrongToken = jwt.sign(
-    profile,
+    tokenPayload,
     testConfig.security.tokenSecret + 'aef0',
     {
       issuer: testConfig.security.tokenIssuer,
+      audience: testConfig.security.tokenAudience,
     },
   );
 

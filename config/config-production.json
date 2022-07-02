@@ -14,7 +14,8 @@
     "ssl": true
   },
   "security": {
-    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET}"
+    "tokenSecret": "",
+    "tokenJwksUri": "${env.STORAGEGATEWAY_TOKEN_JWKS_URI}"
   },
   "errorHandling": {
     "enableRollbar": true

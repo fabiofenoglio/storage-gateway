@@ -16,7 +16,8 @@
     "ssl": true
   },
   "security": {
-    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET:your-jwt-token-secret}",
+    "tokenSecret": "",
+    "tokenJwksUri": "${env.STORAGEGATEWAY_TOKEN_JWKS_URI}",
     "exposeErrorDetails": true
   },
   "upload": {

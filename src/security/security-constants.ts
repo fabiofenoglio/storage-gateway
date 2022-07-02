@@ -1,7 +1,7 @@
 export namespace Security {
   export enum SCOPES {
-    DOC_USAGE = 'storage_gateway.usage',
-    PLATFORM_ADMIN = 'storage_gateway.admin',
+    DOC_USAGE = 'storagegateway:usage',
+    PLATFORM_ADMIN = 'storagegateway:admin',
   }
 
   export enum AuthenticationMethod {

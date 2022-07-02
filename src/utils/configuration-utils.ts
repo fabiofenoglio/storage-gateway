@@ -40,10 +40,12 @@ export interface AppCustomLoggingConfig {
 
 export interface AppCustomSecurityConfig {
   realm: string;
-  tokenSecret: string;
   tokenIssuer: string;
+  tokenAudience: string;
+  algorithm: 'RS256';
   exposeErrorDetails: boolean;
-  algorithm: 'HS256';
+  tokenSecret?: string;
+  tokenJwksUri?: string;
 }
 
 export interface AppCustomUploadConfig {

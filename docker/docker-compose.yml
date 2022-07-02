@@ -19,7 +19,7 @@ services:
     expose:
       - '3306'
     ports:
-      - 3351:3306
+      - 3306:3306
   #
   # use the following to create a replica of a remote database
   #

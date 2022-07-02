@@ -1,11 +1,22 @@
+import * as Rollbar from 'rollbar';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {inject} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {Request, RestBindings} from '@loopback/rest';
+import {
+  Request,
+  RestBindings,
+} from '@loopback/rest';
 import {SecurityBindings} from '@loopback/security';
-import * as Rollbar from 'rollbar';
-import {ConfigurationBindings, LoggerBindings} from '../key';
-import {AppCustomConfig, ConfigurationUtils} from '../utils';
+
+import {
+  ConfigurationBindings,
+  LoggerBindings,
+} from '../key';
+import {
+  AppCustomConfig,
+  ConfigurationUtils,
+} from '../utils';
 import {ClientProfile} from './client-profile.service';
 
 export class ErrorService {
@@ -136,7 +147,7 @@ export class ErrorService {
     return {
       ...input,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      user_id: client ? client.id : undefined,
+      user_id: client ? client.code : undefined,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       rollbar_person: this.toRollbarPrincipal(client),
     };
@@ -148,11 +159,7 @@ export class ErrorService {
     }
 
     return {
-      id: client.id,
       username: client.code,
-      channel: client.channel,
-      connectIp: client.connectIp,
-      name: client.name,
     };
   }
 }

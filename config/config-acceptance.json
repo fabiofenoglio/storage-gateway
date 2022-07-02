@@ -20,8 +20,11 @@
   },
   "security": {
     "tokenIssuer": "acceptance-token-issuer",
+    "tokenAudience": "acceptance-token-audience",
     "tokenSecret": "acceptance-token-secret",
-    "exposeErrorDetails": true
+    "tokenJwksUri": "",
+    "exposeErrorDetails": true,
+    "algorithm": "HS256"
   },
   "upload": {
     "location": "~/storagegateway/upload",

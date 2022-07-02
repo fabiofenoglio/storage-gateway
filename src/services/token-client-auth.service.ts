@@ -1,37 +1,54 @@
+import * as jwt from 'jsonwebtoken';
+import jwks from 'jwks-rsa';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {inject} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {HttpErrors, Request} from '@loopback/rest';
-import * as jwt from 'jsonwebtoken';
-import {ConfigurationBindings, LoggerBindings} from '../key';
-import {TokenClientAuthenticationStrategyCredentials} from '../security/security-constants';
+import {
+  HttpErrors,
+  Request,
+} from '@loopback/rest';
+
+import {
+  ConfigurationBindings,
+  LoggerBindings,
+} from '../key';
+import {
+  TokenClientAuthenticationStrategyCredentials,
+} from '../security/security-constants';
 import {AppCustomSecurityConfig} from '../utils/configuration-utils';
-import {ObjectUtils} from '../utils/object-utils';
 
-export interface AuthenticationTokenPayload {
-  id: number;
-  name: string;
-  code: string;
-  groups: string[];
-  scopes: string[];
-  channel?: string;
-}
-
-export interface SignedAuthenticationTokenPayload
-  extends AuthenticationTokenPayload {
+export interface SignedAuthenticationTokenPayload {
   iat: number;
   iss: string;
   sub: string;
   jti: string;
   exp: number;
+  scope: string;
+  gty: string;
 }
 
 export class TokenAuthenticationClientService {
+  jwksClient?: jwks.JwksClient;
+
   constructor(
     @inject(LoggerBindings.SECURITY_LOGGER) private logger: WinstonLogger,
     @inject(ConfigurationBindings.SECURITY_CONFIG)
     private securityConfig: AppCustomSecurityConfig,
-  ) {}
+  ) {
+    if (!!securityConfig.tokenJwksUri === !!securityConfig.tokenSecret?.length) {
+      throw new Error('exactly one of tokenJwksUri and tokenSecret must be provided')
+    }
+
+    if (securityConfig.tokenJwksUri) {
+      this.jwksClient = jwks({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 10,
+        jwksUri: securityConfig.tokenJwksUri,
+      });
+    }
+  }
 
   async verifyCredentials(
     credentials: TokenClientAuthenticationStrategyCredentials,
@@ -40,18 +57,19 @@ export class TokenAuthenticationClientService {
       throw new HttpErrors.Unauthorized(`Missing credentials`);
     }
 
-    const secret = this.resolveSecret();
+    const signingKey = await this.resolveSigningKey(credentials.token);
 
     let verified: any;
 
     try {
-      verified = jwt.verify(credentials.token, secret, {
+      verified = jwt.verify(credentials.token, signingKey, {
         complete: true,
-        issuer: this.securityConfig.tokenIssuer,
         algorithms: [this.securityConfig.algorithm],
+        issuer: this.securityConfig.tokenIssuer,
+        audience: this.securityConfig.tokenAudience,
       });
     } catch (err) {
-      console.error('token verification failed:', err);
+      this.logger.error('token verification failed:', err);
       throw new HttpErrors.Unauthorized(`Token verification failed`);
     }
 
@@ -68,6 +86,46 @@ export class TokenAuthenticationClientService {
     }
 
     return parsed;
+  }
+
+  async resolveSigningKey(token: string): Promise<string> {
+    if (this.jwksClient) {
+      let decoded: jwt.Jwt;
+      try {
+        const decodedAttempt = jwt.decode(token, { complete: true });
+        if (!decodedAttempt) {
+          throw new Error('no token could be decoded');
+        }
+        decoded = decodedAttempt;
+      } catch (err) {
+        this.logger.error('token decoding failed:', err);
+        throw new HttpErrors.Unauthorized(`Token decoding failed`);
+      }
+
+      if (!decoded.header.kid?.length) {
+        this.logger.error('token decoding failed: missing key ID');
+        throw new HttpErrors.Unauthorized(`Token decoding failed`);
+      }
+
+      const key = await this.jwksClient.getSigningKey(decoded.header.kid);
+      if (!key) {
+        this.logger.error('token decoding failed: missing key');
+        throw new HttpErrors.Unauthorized(`Token decoding failed`);
+      }
+
+      const signingKey = key.getPublicKey();
+      if (!signingKey?.length) {
+        this.logger.error('token decoding failed: missing signingKey');
+        throw new HttpErrors.Unauthorized(`Token decoding failed`);
+      }
+      return signingKey;
+
+    } else if (this.securityConfig.tokenSecret?.length) {
+      return this.securityConfig.tokenSecret;
+
+    } else {
+      throw new Error('no key could be resolved for signature verification')
+    }
   }
 
   extractCredentials(
@@ -113,10 +171,5 @@ export class TokenAuthenticationClientService {
     };
 
     return creds;
-  }
-
-  resolveSecret(): string {
-    const config = ObjectUtils.require(this.securityConfig, 'tokenSecret');
-    return config.trim();
   }
 }
