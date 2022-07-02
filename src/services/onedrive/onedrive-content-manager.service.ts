@@ -1,4 +1,11 @@
-import {inject, injectable, service} from '@loopback/core';
+import {Readable} from 'stream';
+import {v4 as uuidv4} from 'uuid';
+
+import {
+  inject,
+  injectable,
+  service,
+} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
@@ -9,9 +16,11 @@ import {
   ResponseType,
 } from '@microsoft/microsoft-graph-client';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
-import {Readable} from 'stream';
-import {v4 as uuidv4} from 'uuid';
-import {ConfigurationBindings, LoggerBindings} from '../../key';
+
+import {
+  ConfigurationBindings,
+  LoggerBindings,
+} from '../../key';
 import {
   ClientTenant,
   ClientTenantBackbone,
@@ -20,11 +29,21 @@ import {
   OnedriveContent,
   StorageNode,
 } from '../../models';
-import {ContentAssetMetadata} from '../../models/content/content-asset-metadata.model';
-import {ContentMetadataHashes} from '../../models/content/content-metadata-hashes.model';
-import {ContentMetadataImageThumbnail} from '../../models/content/content-metadata-image-thumbnail.model';
-import {ContentMetadataImage} from '../../models/content/content-metadata-image.model';
-import {ContentMetadataVideo} from '../../models/content/content-metadata-video.model';
+import {
+  ContentAssetMetadata,
+} from '../../models/content/content-asset-metadata.model';
+import {
+  ContentMetadataHashes,
+} from '../../models/content/content-metadata-hashes.model';
+import {
+  ContentMetadataImageThumbnail,
+} from '../../models/content/content-metadata-image-thumbnail.model';
+import {
+  ContentMetadataImage,
+} from '../../models/content/content-metadata-image.model';
+import {
+  ContentMetadataVideo,
+} from '../../models/content/content-metadata-video.model';
 import {ContentWithMetadata} from '../../models/content/content-models.model';
 import {ContentStreamer} from '../../models/content/content-streamer.model';
 import {
@@ -38,14 +57,25 @@ import {
   StorageNodeRepository,
 } from '../../repositories';
 import {RestContext} from '../../rest/rest-context.model';
-import {ObjectUtils, PathUtils, RequestUtils, retry} from '../../utils';
+import {
+  ObjectUtils,
+  PathUtils,
+  RequestUtils,
+  retry,
+} from '../../utils';
 import {AppCustomConfig} from '../../utils/configuration-utils';
 import {SanitizationUtils} from '../../utils/sanitization-utils';
 import {StreamUtils} from '../../utils/stream-utils';
-import {AbstractBackboneManagerService} from '../content/abstract-backbone-manager.service';
-import {AbstractContentManagerService} from '../content/abstract-content-manager.service';
+import {
+  AbstractBackboneManagerService,
+} from '../content/abstract-backbone-manager.service';
+import {
+  AbstractContentManagerService,
+} from '../content/abstract-content-manager.service';
 import {ContentProcessorService} from '../content/content-processor.service';
-import {UnmanagedContentManagerService} from '../content/unmanaged-content-manager.service';
+import {
+  UnmanagedContentManagerService,
+} from '../content/unmanaged-content-manager.service';
 import {MetricService} from '../metric.service';
 import {LargeFileUploadStreamTask} from './large-file-upload-task-stream.task';
 import {MsGraphTokenService} from './msgraph-token.service';
@@ -78,6 +108,10 @@ export class OnedriveContentManager extends UnmanagedContentManagerService<
     private metricService: MetricService,
   ) {
     super(logger);
+  }
+
+  get engineVersion(): number {
+    return 3;
   }
 
   public get typeCode(): string {
@@ -716,12 +750,7 @@ export class OnedriveContentManager extends UnmanagedContentManagerService<
       SanitizationUtils.stripSlashes(backBone.rootLocation) +
       '/tenant-' +
       SanitizationUtils.stripSlashes(this.sanitizeTenantCode(tenant.code)) +
-      (contentData?.uuid
-        ? '/' +
-          contentData.uuid.substr(contentData.uuid.length - 2) +
-          '/node-' +
-          node?.uuid
-        : '');
+      (node?.uuid ? '/node-' + node?.uuid : '');
 
     return {
       driveId: backBone.driveId,
