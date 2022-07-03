@@ -1,33 +1,25 @@
 import {injectable} from '@loopback/core';
 import {securityId} from '@loopback/security';
+
 import {
   ClientAuthenticationRequirements,
   Security,
 } from '../security/security-constants';
-import {AuthenticationTokenPayload} from './token-client-auth.service';
+import {SignedAuthenticationTokenPayload} from './token-client-auth.service';
 
 export interface ClientAuthorizations {
-  groups: string[];
   scopes: string[];
 }
 
 export interface ClientProfile extends ClientAuthorizations {
   [securityId]: string;
-  name: string;
   code: string;
-  id: number;
-  channel?: string;
-  connectIp?: string;
-  proxyIps?: string[];
   authenticationMethod?: Security.AuthenticationMethod;
 }
 
 export const SystemClient: ClientProfile = {
-  [securityId]: '0',
-  name: 'System',
+  [securityId]: 'system',
   code: 'system',
-  id: 0,
-  groups: [],
   scopes: [],
 };
 
@@ -36,17 +28,18 @@ export class ClientProfileService {
   constructor() {}
 
   public async profileFromToken(
-    payload: AuthenticationTokenPayload,
+    payload: SignedAuthenticationTokenPayload,
   ): Promise<ClientProfile> {
+    const scopes: string[] = [];
+    if (payload.scope?.length) {
+      scopes.push(...payload.scope.split(' '));
+    }
+
     const output: ClientProfile = {
-      groups: payload.groups ?? [],
-      scopes: payload.scopes ?? [],
-      [securityId]: payload.id.toString(),
-      name: payload.name,
-      code: payload.code,
-      id: payload.id,
+      [securityId]: payload.sub.toString(),
+      scopes: scopes,
+      code: payload.sub,
       authenticationMethod: Security.AuthenticationMethod.TOKEN,
-      channel: payload.channel,
     };
 
     return output;

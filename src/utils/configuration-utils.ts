@@ -40,10 +40,12 @@ export interface AppCustomLoggingConfig {
 
 export interface AppCustomSecurityConfig {
   realm: string;
-  tokenSecret: string;
   tokenIssuer: string;
+  tokenAudience: string;
+  algorithm: 'RS256';
   exposeErrorDetails: boolean;
-  algorithm: 'HS256';
+  tokenSecret?: string;
+  tokenJwksUri?: string;
 }
 
 export interface AppCustomUploadConfig {
@@ -130,14 +132,12 @@ export abstract class ConfigurationUtils {
     const configFile = `config-${envName.toLowerCase()}.json`;
     const profiledConfiguration = ConfigurationUtils.readConfigurationFromFile(
       configFile,
-      { optional: true },
+      {optional: true},
     );
 
     if (!profiledConfiguration) {
       throw new Error(
-        `Missing profile configuration. Is the profile "${
-          envName.toLowerCase()
-        }" correct? Is the configuration file "${configFile}" present?`,
+        `Missing profile configuration. Is the profile "${envName.toLowerCase()}" correct? Is the configuration file "${configFile}" present?`,
       );
     }
 

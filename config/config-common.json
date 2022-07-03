@@ -44,8 +44,10 @@
     "exposeErrorDetails": false,
     "realm": "STORAGEGATEWAY",
     "tokenIssuer": "${env.STORAGEGATEWAY_IAM_ISSUER}",
-    "tokenSecret": "${env.STORAGEGATEWAY_TOKEN_SECRET}",
-    "algorithm": "HS256"
+    "tokenAudience": "${env.STORAGEGATEWAY_IAM_AUDIENCE}",
+    "tokenSecret": "",
+    "tokenJwksUri": "${env.STORAGEGATEWAY_TOKEN_JWKS_URI:}",
+    "algorithm": "RS256"
   },
   "upload": {
     "location": "${env.STORAGEGATEWAY_UPLOAD_LOCATION:/var/storagegateway/uploads}",

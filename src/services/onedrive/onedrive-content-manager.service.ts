@@ -1,3 +1,6 @@
+import {Readable} from 'stream';
+import {v4 as uuidv4} from 'uuid';
+
 import {inject, injectable, service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {repository} from '@loopback/repository';
@@ -9,8 +12,7 @@ import {
   ResponseType,
 } from '@microsoft/microsoft-graph-client';
 import * as MicrosoftGraph from '@microsoft/microsoft-graph-types';
-import {Readable} from 'stream';
-import {v4 as uuidv4} from 'uuid';
+
 import {ConfigurationBindings, LoggerBindings} from '../../key';
 import {
   ClientTenant,
@@ -78,6 +80,10 @@ export class OnedriveContentManager extends UnmanagedContentManagerService<
     private metricService: MetricService,
   ) {
     super(logger);
+  }
+
+  get engineVersion(): number {
+    return 3;
   }
 
   public get typeCode(): string {
@@ -716,12 +722,7 @@ export class OnedriveContentManager extends UnmanagedContentManagerService<
       SanitizationUtils.stripSlashes(backBone.rootLocation) +
       '/tenant-' +
       SanitizationUtils.stripSlashes(this.sanitizeTenantCode(tenant.code)) +
-      (contentData?.uuid
-        ? '/' +
-          contentData.uuid.substr(contentData.uuid.length - 2) +
-          '/node-' +
-          node?.uuid
-        : '');
+      (node?.uuid ? '/node-' + node?.uuid : '');
 
     return {
       driveId: backBone.driveId,

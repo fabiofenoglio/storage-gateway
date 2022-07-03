@@ -1,6 +1,7 @@
 import {inject, injectable, service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {HttpErrors} from '@loopback/rest';
+
 import {LoggerBindings} from '../key';
 import {
   AbstractContent,

@@ -1,14 +1,6 @@
-import {
-  BindingScope,
-  inject,
-  injectable,
-  service
-} from '@loopback/core';
+import {BindingScope, inject, injectable, service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
-import {
-  juggler,
-  repository
-} from '@loopback/repository';
+import {juggler, repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
 import AsyncLock from 'async-lock';
 import {v4 as uuidv4} from 'uuid';
@@ -17,8 +9,6 @@ import {ResourceLock} from '../models';
 import {ResourceLockRepository} from '../repositories';
 import {ObjectUtils} from '../utils';
 import {TransactionService} from './transaction-manager.service';
-
-
 
 export interface LockAcquisitionRequest {
   resourceCode: string;

@@ -49,7 +49,9 @@
     "generate-spring-client": "node ./scripts/generate-spring-client.js",
     "pregenerate-node-client": "npm run openapi-spec-export",
     "generate-node-client": "node ./scripts/generate-node-client.js",
-    "validate": "npm run clean && npm run build && npm run lint:fix && npm run test && npm run generate-spring-client && npm run generate-node-client",
+    "pregenerate-golang-client": "npm run openapi-spec-export",
+    "generate-golang-client": "node ./scripts/generate-golang-client.js",
+    "validate": "npm run clean && npm run build && npm run lint:fix && npm run test && npm run generate-spring-client && npm run generate-node-client && npm run generate-golang-client",
     "check-circular": "npm run rebuild && npx madge --circular dist/index.js"
   },
   "repository": {
@@ -90,6 +92,7 @@
     "fs-extra": "^9.0.1",
     "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.1.4",
     "loopback-connector-mysql": "^5.4.4",
     "minimist": "^1.2.5",
     "multer": "^1.4.2",

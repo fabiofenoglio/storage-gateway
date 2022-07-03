@@ -5,16 +5,9 @@ import {service} from '@loopback/core';
 import {WinstonLogger} from '@loopback/logging';
 import {HttpErrors} from '@loopback/rest';
 
-import {
-  ClientTenant,
-  Page,
-  Pageable,
-  StorageNode,
-} from '../../models';
+import {ClientTenant, Page, Pageable, StorageNode} from '../../models';
 import {AbstractContent} from '../../models/content/abstract-content.model';
-import {
-  ContentEncryptionMetadata,
-} from '../../models/content/content-encryption-metadata.model';
+import {ContentEncryptionMetadata} from '../../models/content/content-encryption-metadata.model';
 import {
   ContentWithMetadata,
   DeferredContentRetriever,
@@ -29,10 +22,7 @@ import {
   supportedEncryptionPolicies,
 } from '../../models/crypto/crypto-models.model';
 import {RestContext} from '../../rest/rest-context.model';
-import {
-  ObjectUtils,
-  SanitizationUtils,
-} from '../../utils';
+import {ObjectUtils, SanitizationUtils} from '../../utils';
 import {StreamUtils} from '../../utils/stream-utils';
 import {CryptoService} from '../crypto.service';
 import {MetricService} from '../metric.service';
@@ -240,7 +230,11 @@ export abstract class AbstractContentManagerService<T extends AbstractContent> {
     }
 
     if (encPolicy.authenticated && !encryption?.auth) {
-      throw new Error('Encryption policy ' + encryption?.alg + ' requires authentication signature but none provided');
+      throw new Error(
+        'Encryption policy ' +
+          encryption?.alg +
+          ' requires authentication signature but none provided',
+      );
     }
 
     return ContentStreamer.fromStreamProvider(async r => {
